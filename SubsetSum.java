@@ -1,55 +1,31 @@
-package main.java;
 import java.util.*;
 
-public class SubsetSum {
-
-	int targetSum;
-	int[] inputArray;
+class SubsetSum {
 	
-	SubsetSum(int targetSum, int[] inputArray) {
-		this.targetSum = targetSum;
-		this.inputArray = inputArray;
+	public int calSubsetSumRec(int target,int index,int[]input,int[][] dp) {
+		if(target == 0)
+			return 1;
+		if(target<0 || index == input.length)
+			return 0;
+		else 
+			dp[index][target] = calSubsetSumRec(target-input[index],index+1,input,dp) + calSubsetSumRec(target,index+1,input,dp);	
+		return dp[index][target];
 	}
 	
-	public boolean checkSum() {
-		
-		boolean dp[][] = new boolean[inputArray.length][targetSum+1];
-		dp[0][0] = true;
-		for (int i=1;i<dp[0].length;i++) {
-			dp[0][i] = false;
-		}
-		for(int i=1;i<dp.length;i++) {
-			for(int j=0;j<dp[0].length;j++) {
-			 if(inputArray[i] > j)
-				 dp[i][j] = dp[i-1][j];
-			 else {
-				 dp[i][j] = dp[i-1][j] || dp[i-1][j-inputArray[i]];
-			 }
-			}
-		}
-		for(int i=0;i<dp.length;i++) {
-			for(int j=0;j<dp[0].length;j++) {
-				System.out.print(dp[i][j]+" ");
-			}
-			System.out.println();
-		}
-		return dp[inputArray.length-1][targetSum];
-		
+	
+	public static void main(String args[]) {
+		SubsetSum sm = new SubsetSum();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the input size");
+		int n = sc.nextInt();
+		int input[] = new int[n];
+		System.out.println("Enter array");
+		for(int i=0;i<n;i++)
+			input[i] = sc.nextInt();
+		System.out.println("enter the target sum");
+		int target = sc.nextInt();
+		int dp[][] = new int[input.length][target+1];
+		System.out.println(sm.calSubsetSumRec(target,0,input,dp));	
 	}
 	
-public static void main(String args[]) {
-	Scanner sc = new Scanner(System.in);
-	System.out.println("Enter the target sum ");
-	int targetSum = sc.nextInt();
-	System.out.println("Enter the length of array");
-	int len = sc.nextInt();
-	int subsetArray [] = new int[len+1];
-	subsetArray[0] = 0;
-	System.out.println("Enter the elements");
-	for (int i=1;i<len+1;i++) {
-		subsetArray[i] = sc.nextInt();
-	}
-	SubsetSum sm = new SubsetSum(targetSum,subsetArray);
-	System.out.println("Result is "+sm.checkSum());
-}
 }
